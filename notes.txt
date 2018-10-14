@@ -1,0 +1,100 @@
+React/Redux - crud
+==========================
+Origin: https://codeburst.io/redux-a-crud-example-abb834d763c9
+https://github.com/pratik-chakravorty/CRUD-with-React-Redux
+
+    An sample app where the user can create posts, read posts , edit posts and delete posts using React and Redux.
+
+    Redux is a predictable state container for JavaScript apps. It helps you write applications that behave consistently, run in different evironments(client, server, and native), and are easy to test.
+
+    Redux is a state management library that gives you access to the state anywhere in your components. Redux can be used with or without any front-end libraries such as Angular and React. ‘react-redux’ is a the official binding helper/library that connects the two.
+
+npx create-react-app rdx-crud
+remove App.css App.test.js logo.svg registerServiceWorker.js in ./src
+yarn add redux react-redux
+update App.js and index.js in ./src
+yarn start
+
+create ./src/components folder
+create app.js PostForm.js and AllPost.js under ./src in ./src/components
+yarn start
+
+    Redux store is an object (state tree) which has some methods in it that allows us to get the current state of our application, subscribe to changes or update the existing state of our application by dispatch actions. Hence, we don’t have to pass down data from the parent component to deeply nested child components through props. So anytime a component can ask the store provide it with the current state/data. 
+
+update ./src/index.js with store code
+create ./src/reducers folder
+create ./src/reducers/postReducer.js
+
+    Actions are plain Javascript objects with a "type" property. Acttions describe ui changes).
+    An action can have any number of properties but it must have a type property. 
+    When we say ‘dispatch an action’ we simply mean call the dispatch method which is inside the store object with an action.
+
+    The store that we created using the createStore method is an object which has some methods in it. One of those methods is called dispatch. This dispatch method accepts an object as it’s argument and this object is what we call as ‘action’.
+
+    Reducer is nothing but a function that takes the current state and an action that was dispatched as it’s parameters and returns the new state. Reducers check which type of action and payload(other data properties) are dispatched and return the new state .
+
+update ./src/reducers/postReducer.js
+
+    A reducer must always have the default clause inside the switch statement. In the default clause we simply return the state. This is done so that in case none of the action.type value matches any of the cases we simply return the state.
+
+update ./src/reducers/postReducer.js with Provider omponent from the ‘react-redux’ library.
+
+    The Provider component uses something called React Context which allows you to pass the store object to any decendent components that needs to access it without the need to pass props.
+
+update ./src/components/PostForm.js with interactivity
+
+    The form element now accepts an onSubmit event. Whenever this event takes place the handleSubmit function will execute. The handleSubmit function takes one argument which is the event. Calling e.preventDefault() will prevent the page from refreshing. Next we grab the value of the title and the message from the inputs using refs and then put them inside an object called data. We also have an id property whose value is set to whatever new Date() returns. We will use this id property to perform update and delete operations.
+
+update ./src/components/PostForm.js with store connection using the connect() function provided by the react-redux library
+
+    connect() returns a function which takes in your current component as an argument and returns a new component with (partial of whole store state or/and) store dispatch method as its prop.
+
+update ./src/components/PostForm.js, dispatching actions with the passed store dispatch() method
+
+    Remember that connect() gives you access to dispatch as a prop. Here once we have captured the data from the form we dispatch the action using this.props.dispatch() passing in the data object with a type of ‘ADD_POST’.
+
+    Additionally, connect can do more. It can give you access to your state which is living inside your store object. To get access to your state, we need to use a special function called mapStateToProps. This function does exactly what it is named, map the state from the store object to the props object in your components.
+
+const mapStateToProps = (state) => {
+    return {
+        posts: state
+    }
+}
+
+    The argument to mapStateToProps is our application state. To understand this better, imagine whatever you pass inside the mapStateToProps argument is your state. The shape of the state will depend on what you have defined it in your reducer. In out case the state is an array.
+    we return an object with a key posts and the value is the state itself. The key that we use in mapStateToProps will be available to us as props inside the component.
+
+    To use mapStateToProps, we pass it as an argument to our store connect method.
+
+Update ./src/components/PAllPost.js with store connection and test with console.log
+
+create ./src/components/Post.js
+Update ./src/components/AllPost.js with Post component
+
+do some testing
+    If you have got this far, great you are finally done with the C and the R part of this CRUD application as now we can create posts and can read them as well.
+
+update ./src/components/Post.js with Delete/Edit buttons
+add connect() and onClick event handlers as a proper to Delete button
+update postReducer.js with ‘DELETE_POST’ action type
+
+do some testing
+    you have successfully implemented the D of this CRUD application
+
+update ./src/components/PostForm.js with new data object property: editting
+create ./src/components/EditComponent.js
+update postReducer.js with ‘UPDATE’ action type
+update Edit buttoN to Post.js
+update postReducer.js with ‘EDIT_POST’ action type
+
+do some testing
+    Great, so our CRUD functionality is complete. Now let’s add in some styles so that it looks good.
+
+update ./index.css
+
+===================
+
+There are more advanced concepts that are not covered like action-creators,middleware,combining multiple reducers and handling external API requests just to keep things simple. 
+
+If you like to challenge yourself then please extend this application even further. 
+Try adding a comments feature or an authentication system where only authorized users can view the posts and a user can modify only his/her own posts,add support for upvotes and downvotes for each posts maybe add in some animations when you create a post or delete a post.There are so many things that you can do to improve this app.
